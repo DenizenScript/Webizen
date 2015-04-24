@@ -32,7 +32,7 @@ public class GetRequestScriptEvent extends ScriptEvent {
     @Override
     public boolean matches(ScriptContainer scriptContainer, String s) {
         String lower = CoreUtilities.toLowerCase(s);
-        return CoreUtilities.xthArgEquals(2, lower, "request");
+        return CoreUtilities.xthArgEquals(1, lower, "request");
     }
 
     @Override

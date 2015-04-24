@@ -19,6 +19,7 @@ public class Webizen extends JavaPlugin {
         if (denizen == null) {
             getLogger().severe("Denizen not found, disabling...");
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
         new WebCommand().activate().as("WEB").withOptions("web [start/stop] (port:<#>{80})", 1);
