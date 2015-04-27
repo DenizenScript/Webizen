@@ -10,6 +10,7 @@ import space.morphanone.webizen.events.GetRequestScriptEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
 import java.util.concurrent.Executor;
 
 public class WebServer {
@@ -24,17 +25,30 @@ public class WebServer {
                 public void handle(final HttpExchange httpExchange) throws IOException {
                     if (httpExchange.getRequestMethod().equalsIgnoreCase("GET")) {
                         try {
-                            httpExchange.getResponseHeaders().set("Content-Type", "text/html");
 
                             GetRequestScriptEvent event = GetRequestScriptEvent.instance;
                             event.httpExchange = httpExchange;
+                            event.contentType = null;
+                            event.response = null;
+                            event.responseCode = null;
+                            event.responseFile = null;
                             event.fire();
+                            String contentType = event.contentType != null ? event.contentType.asString() : "text/html";
+                            httpExchange.getResponseHeaders().set("Content-Type", contentType);
                             int responseCode = event.responseCode != null ? event.responseCode.asInt() : 200;
-                            String response = event.response != null ? event.response.asString() : "";
-                            byte[] responseBytes = response.getBytes();
-                            httpExchange.sendResponseHeaders(responseCode, responseBytes.length);
                             OutputStream out = httpExchange.getResponseBody();
-                            out.write(responseBytes);
+                            if (event.response == null && event.responseFile == null) {
+                                httpExchange.sendResponseHeaders(responseCode, 0);
+                            }
+                            else if (event.response != null) {
+                                byte[] responseBytes = event.response.asString().getBytes("UTF-8");
+                                httpExchange.sendResponseHeaders(responseCode, responseBytes.length);
+                                out.write(responseBytes);
+                            }
+                            else {
+                                httpExchange.sendResponseHeaders(responseCode, event.responseFile.length());
+                                Files.copy(event.responseFile.toPath(), out);
+                            }
                             out.close();
                         } catch (IOException e) {
                             dB.echoError(e);

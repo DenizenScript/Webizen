@@ -2,6 +2,7 @@ package space.morphanone.webizen.events;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.aufdemrand.denizen.BukkitScriptEntryData;
+import net.aufdemrand.denizen.utilities.DenizenAPI;
 import net.aufdemrand.denizencore.events.ScriptEvent;
 import net.aufdemrand.denizencore.objects.Element;
 import net.aufdemrand.denizencore.objects.dObject;
@@ -10,6 +11,8 @@ import net.aufdemrand.denizencore.scripts.containers.ScriptContainer;
 import net.aufdemrand.denizencore.utilities.CoreUtilities;
 import net.aufdemrand.denizencore.utilities.debugging.dB;
 
+import java.io.File;
+import java.net.URI;
 import java.util.HashMap;
 
 public class GetRequestScriptEvent extends ScriptEvent {
@@ -20,8 +23,10 @@ public class GetRequestScriptEvent extends ScriptEvent {
 
     public static GetRequestScriptEvent instance;
     public HttpExchange httpExchange;
+    public Element contentType;
     public Element response;
     public Element responseCode;
+    public File responseFile;
 
     @Override
     public boolean couldMatch(ScriptContainer scriptContainer, String s) {
@@ -51,6 +56,17 @@ public class GetRequestScriptEvent extends ScriptEvent {
             }
             responseCode = code;
         }
+        else if (lower.startsWith("file:")) {
+            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(5));
+            if (!file.exists()) {
+                dB.echoError("File '" + file + "' does not exist.");
+                return false;
+            }
+            responseFile = file;
+        }
+        else if (lower.startsWith("type:")) {
+            contentType = new Element(lower.substring(5));
+        }
         else {
             response = new Element(determination);
         }
@@ -66,7 +82,10 @@ public class GetRequestScriptEvent extends ScriptEvent {
     public HashMap<String, dObject> getContext() {
         HashMap<String, dObject> context = super.getContext();
         context.put("address", new Element(httpExchange.getRemoteAddress().toString()));
-        context.put("request", new Element(httpExchange.getRequestURI().toString()));
+        URI uri = httpExchange.getRequestURI();
+        context.put("query", new Element(uri.getQuery()));
+        context.put("request", new Element(uri.getPath()));
+        context.put("user_info", new Element(uri.getUserInfo()));
         return context;
     }
 }
