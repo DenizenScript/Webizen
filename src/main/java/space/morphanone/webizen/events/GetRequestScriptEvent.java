@@ -27,6 +27,7 @@ public class GetRequestScriptEvent extends ScriptEvent {
     public Element response;
     public Element responseCode;
     public File responseFile;
+    public Element parseFile;
 
     @Override
     public boolean couldMatch(ScriptContainer scriptContainer, String s) {
@@ -63,6 +64,16 @@ public class GetRequestScriptEvent extends ScriptEvent {
                 return false;
             }
             responseFile = file;
+            parseFile = Element.FALSE;
+        }
+        else if (lower.startsWith("parsed_file:")) {
+            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(12));
+            if (!file.exists()) {
+                dB.echoError("File '" + file + "' does not exist.");
+                return false;
+            }
+            responseFile = file;
+            parseFile = Element.TRUE;
         }
         else if (lower.startsWith("type:")) {
             contentType = new Element(lower.substring(5));

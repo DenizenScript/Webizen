@@ -3,6 +3,8 @@ package space.morphanone.webizen;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import net.aufdemrand.denizen.tags.BukkitTagContext;
+import net.aufdemrand.denizencore.tags.TagManager;
 import net.aufdemrand.denizencore.utilities.debugging.dB;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.morphanone.webizen.events.GetRequestScriptEvent;
@@ -12,9 +14,12 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.util.concurrent.Executor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebServer {
 
+    private static final Pattern tagPattern = Pattern.compile("<\\{([^\\}]*)\\}>");
     private static HttpServer httpServer;
 
     public static void start(int port) throws IOException {
@@ -25,13 +30,13 @@ public class WebServer {
                 public void handle(final HttpExchange httpExchange) throws IOException {
                     if (httpExchange.getRequestMethod().equalsIgnoreCase("GET")) {
                         try {
-
                             GetRequestScriptEvent event = GetRequestScriptEvent.instance;
                             event.httpExchange = httpExchange;
                             event.contentType = null;
                             event.response = null;
                             event.responseCode = null;
                             event.responseFile = null;
+                            event.parseFile = null;
                             event.fire();
                             String contentType = event.contentType != null ? event.contentType.asString() : "text/html";
                             httpExchange.getResponseHeaders().set("Content-Type", contentType);
@@ -42,6 +47,17 @@ public class WebServer {
                             }
                             else if (event.response != null) {
                                 byte[] responseBytes = event.response.asString().getBytes("UTF-8");
+                                httpExchange.sendResponseHeaders(responseCode, responseBytes.length);
+                                out.write(responseBytes);
+                            }
+                            else if (event.parseFile.asBoolean()) {
+                                String html = new String(Files.readAllBytes(event.responseFile.toPath()));
+                                Matcher m = tagPattern.matcher(html);
+                                while (m.find()) {
+                                    html = m.replaceFirst(TagManager.readSingleTag(m.group(1),
+                                            new BukkitTagContext(null, false)));
+                                }
+                                byte[] responseBytes = html.getBytes("UTF-8");
                                 httpExchange.sendResponseHeaders(responseCode, responseBytes.length);
                                 out.write(responseBytes);
                             }
