@@ -53,11 +53,13 @@ public class WebServer {
                             else if (event.parseFile.asBoolean()) {
                                 String html = new String(Files.readAllBytes(event.responseFile.toPath()));
                                 Matcher m = tagPattern.matcher(html);
+                                StringBuffer s = new StringBuffer(html.length());
                                 while (m.find()) {
-                                    html = m.replaceFirst(TagManager.readSingleTag(m.group(1),
-                                            new BukkitTagContext(null, false)));
+                                    m.appendReplacement(s, Matcher.quoteReplacement(TagManager.readSingleTag(m.group(1),
+                                            new BukkitTagContext(null, false))));
                                 }
-                                byte[] responseBytes = html.getBytes("UTF-8");
+                                m.appendTail(s);
+                                byte[] responseBytes = s.toString().getBytes("UTF-8");
                                 httpExchange.sendResponseHeaders(responseCode, responseBytes.length);
                                 out.write(responseBytes);
                             }
