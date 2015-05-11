@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public class WebServer {
 
     private static final Pattern tagPattern = Pattern.compile("<\\{([^\\}]*)\\}>");
+    private static final BukkitTagContext reusableTagContext = new BukkitTagContext(null, false);
     private static HttpServer httpServer;
 
     public static void start(int port) throws IOException {
@@ -55,8 +56,16 @@ public class WebServer {
                                 Matcher m = tagPattern.matcher(html);
                                 StringBuffer s = new StringBuffer(html.length());
                                 while (m.find()) {
-                                    m.appendReplacement(s, Matcher.quoteReplacement(TagManager.readSingleTag(m.group(1),
-                                            new BukkitTagContext(null, false))));
+                                    String parsed = TagManager.readSingleTag(m.group(1), reusableTagContext);
+                                    // If the parsed output is null, allow Denizen to handle the debugging
+                                    // and return "null"
+                                    if (parsed != null) {
+                                        String cleaned = TagManager.cleanOutput(parsed);
+                                        m.appendReplacement(s, Matcher.quoteReplacement(cleaned));
+                                    }
+                                    else {
+                                        m.appendReplacement(s, "null");
+                                    }
                                 }
                                 m.appendTail(s);
                                 byte[] responseBytes = s.toString().getBytes("UTF-8");
