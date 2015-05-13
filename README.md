@@ -2,4 +2,4 @@
 
 A simple add-on to Denizen for hosting web pages.
 
-### CURRENTLY UNSTABLE
+### CURRENTLY HEAVILY IN DEVELOPMENT

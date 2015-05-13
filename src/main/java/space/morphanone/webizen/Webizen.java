@@ -5,6 +5,7 @@ import net.aufdemrand.denizencore.events.ScriptEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.morphanone.webizen.commands.WebCommand;
 import space.morphanone.webizen.events.GetRequestScriptEvent;
+import space.morphanone.webizen.util.WebServer;
 
 public class Webizen extends JavaPlugin {
 
