@@ -1,4 +1,4 @@
-package space.morphanone.webizen.util;
+package space.morphanone.webizen.fake;
 
 import net.aufdemrand.denizencore.exceptions.ScriptEntryCreationException;
 import net.aufdemrand.denizencore.scripts.ScriptEntry;

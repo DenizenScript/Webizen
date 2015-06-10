@@ -7,7 +7,7 @@ import net.aufdemrand.denizencore.objects.aH;
 import net.aufdemrand.denizencore.scripts.ScriptEntry;
 import net.aufdemrand.denizencore.scripts.commands.AbstractCommand;
 import net.aufdemrand.denizencore.utilities.debugging.dB;
-import space.morphanone.webizen.util.WebServer;
+import space.morphanone.webizen.server.WebServer;
 
 import java.io.IOException;
 import java.net.BindException;

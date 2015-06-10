@@ -5,7 +5,8 @@ import net.aufdemrand.denizencore.events.ScriptEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.morphanone.webizen.commands.WebCommand;
 import space.morphanone.webizen.events.GetRequestScriptEvent;
-import space.morphanone.webizen.util.WebServer;
+import space.morphanone.webizen.events.PostRequestScriptEvent;
+import space.morphanone.webizen.server.WebServer;
 
 public class Webizen extends JavaPlugin {
 
@@ -25,6 +26,7 @@ public class Webizen extends JavaPlugin {
 
         new WebCommand().activate().as("WEB").withOptions("web [start/stop] (port:<#>{80})", 1);
         ScriptEvent.registerScriptEvent(new GetRequestScriptEvent());
+        ScriptEvent.registerScriptEvent(new PostRequestScriptEvent());
     }
 
     @Override

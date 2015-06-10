@@ -1,4 +1,4 @@
-package space.morphanone.webizen.util;
+package space.morphanone.webizen.fake;
 
 import net.aufdemrand.denizencore.objects.dObject;
 import net.aufdemrand.denizencore.scripts.queues.ScriptQueue;
