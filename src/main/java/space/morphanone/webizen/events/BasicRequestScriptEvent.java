@@ -47,6 +47,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     public abstract String getRequestType();
 
     public void fire(HttpExchange httpExchange) {
+        this.httpExchange = httpExchange;
         this.contentType = null;
         this.responseText = null;
         this.responseCode = null;
@@ -95,7 +96,11 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                     response.copyFileFrom(this.responseFile.toPath());
                 }
             }
-            response.send();;
+        } catch (IOException e) {
+            dB.echoError(e);
+        }
+        try {
+            response.send();
         } catch (IOException e) {
             dB.echoError(e);
         }

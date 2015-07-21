@@ -50,6 +50,7 @@ public class ResponseWrapper {
                 OutputStream responseBody = httpExchange.getResponseBody();
                 responseBody.write(buffer.toByteArray());
                 responseBody.flush();
+                responseBody.close();
             }
         } finally {
             httpExchange.close();

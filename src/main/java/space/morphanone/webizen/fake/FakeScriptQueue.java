@@ -3,7 +3,7 @@ package space.morphanone.webizen.fake;
 import net.aufdemrand.denizencore.objects.dObject;
 import net.aufdemrand.denizencore.scripts.queues.ScriptQueue;
 
-import java.util.Map;
+import java.util.HashMap;
 
 public class FakeScriptQueue extends ScriptQueue {
 
@@ -26,9 +26,7 @@ public class FakeScriptQueue extends ScriptQueue {
         throw new IllegalStateException("This is a fake queue!");
     }
 
-    public void setContext(Map<String, dObject> context) {
-        for (Map.Entry<String, dObject> entry : context.entrySet()) {
-            this.addContext(entry.getKey(), entry.getValue());
-        }
+    public void setContext(HashMap<String, dObject> context) {
+        this.cachedContext = context;
     }
 }

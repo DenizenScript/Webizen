@@ -5,6 +5,8 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.morphanone.webizen.Webizen;
+import space.morphanone.webizen.events.GetRequestScriptEvent;
+import space.morphanone.webizen.events.PostRequestScriptEvent;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,7 +22,12 @@ public class WebServer {
             httpServer.createContext("/", new HttpHandler() {
                 @Override
                 public void handle(HttpExchange httpExchange) throws IOException {
-
+                    if (httpExchange.getRequestMethod().equalsIgnoreCase("GET")) {
+                        GetRequestScriptEvent.instance.fire(httpExchange);
+                    }
+                    //else if (httpExchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                    //    PostRequestScriptEvent.instance.fire(httpExchange);
+                    //}
                 }
             });
             httpServer.setExecutor(new Executor() {
