@@ -33,12 +33,7 @@ public class WebServer {
             httpServer.setExecutor(new Executor() {
                 @Override
                 public void execute(final Runnable command) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            command.run();
-                        }
-                    }.runTask(Webizen.currentInstance);
+                    command.run();
                 }
             });
             httpServer.start();
