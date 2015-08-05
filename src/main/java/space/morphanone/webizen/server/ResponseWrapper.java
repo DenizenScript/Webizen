@@ -36,10 +36,12 @@ public class ResponseWrapper {
 
     public void copyFileFrom(Path path) throws IOException {
         Files.copy(path, buffer);
+        buffer.flush();
     }
 
     public void write(byte[] b) throws IOException {
         buffer.write(b);
+        buffer.flush();
     }
 
     public void send() throws IOException {
