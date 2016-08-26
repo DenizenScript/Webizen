@@ -2,6 +2,8 @@
 
 A simple add-on to Denizen for hosting web pages.
 
+Builds: http://ci.citizensnpcs.co/job/Webizen/  
+
 #### CURRENTLY IN DEVELOPMENT.
 
 ## Simple tutorial by BlackCoyote
