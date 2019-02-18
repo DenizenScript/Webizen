@@ -8,4 +8,4 @@ Builds: http://ci.citizensnpcs.co/job/Webizen/
 
 ## Simple tutorial by BlackCoyote
 
-https://docs.google.com/document/d/1P-Jn80AY5tcDEtw6_CZGDeVhVNSI6RitpoRn6DNkBVY
+https://docs.google.com/document/d/11E1asJ92cpsTG1I8nUvFnfgv_duVgul8U1f2_59PBlA
