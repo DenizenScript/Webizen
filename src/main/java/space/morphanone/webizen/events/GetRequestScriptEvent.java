@@ -4,7 +4,9 @@ public class GetRequestScriptEvent extends BasicRequestScriptEvent {
 
     // <--[event]
     // @Events
-    // GET request
+    // get request
+    //
+    // @Regex ^on get request$
     //
     // @Cancellable false
     //
@@ -24,7 +26,6 @@ public class GetRequestScriptEvent extends BasicRequestScriptEvent {
     // "TYPE:" + Element to set the MIME (multi purpose mail extension) of the response (e.g. text/html)
     //
     // @Plugin Webizen
-    //
     // -->
 
     public GetRequestScriptEvent() {

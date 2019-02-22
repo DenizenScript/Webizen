@@ -13,13 +13,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.8.7-R0.1-SNAPSHOT</bukkit.version>
-        <denizen.version>0.9.7-SNAPSHOT</denizen.version>
+        <bukkit.version>1.13.2-R0.1-SNAPSHOT</bukkit.version>
+        <denizen.version>1.0.3-SNAPSHOT</denizen.version>
     </properties>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/Morphan1/Webizen/issues</url>
+        <url>https://github.com/DenizenScript/Webizen/issues</url>
     </issueManagement>
 
     <!-- Repositories -->
@@ -50,5 +50,21 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <defaultGoal>clean package install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgument></compilerArgument>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

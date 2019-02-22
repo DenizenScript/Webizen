@@ -21,22 +21,22 @@ public class WebCommand extends AbstractCommand {
     // @Stable unstable
     // @Short Manages the web server ran on your minecraft server
     // @Author Morphan1
-    // @group server
-
+    // @group addons
+    //
     // @Description
     // Lets you start or stop a web server
     // Only one web server can run on the server at once
     // The default port when the port argument is not specified, is 80
     // TODO: Document command details!
-
+    //
     // @Usage
     // Use to start the web server on port 10123
     // - web start port:10123
-
+    //
     // @Usage
     // Use to stop the web server
     // - web stop
-
+    //
     // @Plugin Webizen
     // -->
 
