@@ -1,12 +1,10 @@
 package space.morphanone.webizen.fake;
 
-import net.aufdemrand.denizencore.exceptions.ScriptEntryCreationException;
 import net.aufdemrand.denizencore.scripts.ScriptEntry;
-import net.aufdemrand.denizencore.utilities.debugging.dB;
 
 public class FakeScriptEntry extends ScriptEntry {
 
-    public FakeScriptEntry() throws ScriptEntryCreationException {
+    public FakeScriptEntry() {
         super("FAKE_CMD", null, null);
         setSendingQueue(new FakeScriptQueue());
     }
@@ -17,11 +15,6 @@ public class FakeScriptEntry extends ScriptEntry {
     }
 
     public static FakeScriptEntry generate() {
-        try {
-            return new FakeScriptEntry();
-        } catch (ScriptEntryCreationException e) {
-            dB.echoError(e);
-            return null;
-        }
+        return new FakeScriptEntry();
     }
 }
