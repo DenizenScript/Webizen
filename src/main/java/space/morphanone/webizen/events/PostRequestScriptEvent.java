@@ -26,7 +26,7 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
     //
     // @Cancellable false
     //
-    // @Triggers when the web server receives a GET request
+    // @Triggers when the web server receives a POST request
     //
     // @Context
     // <context.address> Returns the IP address of the device that sent the request.
