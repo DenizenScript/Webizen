@@ -3,10 +3,7 @@ package space.morphanone.webizen.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.bukkit.scheduler.BukkitRunnable;
-import space.morphanone.webizen.Webizen;
 import space.morphanone.webizen.events.GetRequestScriptEvent;
-import space.morphanone.webizen.events.PostRequestScriptEvent;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

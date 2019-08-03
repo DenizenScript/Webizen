@@ -1,7 +1,7 @@
 package space.morphanone.webizen;
 
-import net.aufdemrand.denizen.Denizen;
-import net.aufdemrand.denizencore.events.ScriptEvent;
+import com.denizenscript.denizen.Denizen;
+import com.denizenscript.denizencore.events.ScriptEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.morphanone.webizen.commands.WebCommand;
 import space.morphanone.webizen.events.GetRequestScriptEvent;

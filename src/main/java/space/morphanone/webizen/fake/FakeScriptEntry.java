@@ -1,6 +1,6 @@
 package space.morphanone.webizen.fake;
 
-import net.aufdemrand.denizencore.scripts.ScriptEntry;
+import com.denizenscript.denizencore.scripts.ScriptEntry;
 
 public class FakeScriptEntry extends ScriptEntry {
 

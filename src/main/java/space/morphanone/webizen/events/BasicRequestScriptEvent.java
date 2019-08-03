@@ -1,17 +1,17 @@
 package space.morphanone.webizen.events;
 
 import com.sun.net.httpserver.HttpExchange;
-import net.aufdemrand.denizen.BukkitScriptEntryData;
-import net.aufdemrand.denizen.tags.BukkitTagContext;
-import net.aufdemrand.denizen.utilities.DenizenAPI;
-import net.aufdemrand.denizencore.events.ScriptEvent;
-import net.aufdemrand.denizencore.objects.Element;
-import net.aufdemrand.denizencore.objects.dObject;
-import net.aufdemrand.denizencore.scripts.ScriptEntryData;
-import net.aufdemrand.denizencore.scripts.containers.ScriptContainer;
-import net.aufdemrand.denizencore.tags.TagManager;
-import net.aufdemrand.denizencore.utilities.CoreUtilities;
-import net.aufdemrand.denizencore.utilities.debugging.dB;
+import com.denizenscript.denizen.BukkitScriptEntryData;
+import com.denizenscript.denizen.tags.BukkitTagContext;
+import com.denizenscript.denizen.utilities.DenizenAPI;
+import com.denizenscript.denizencore.events.ScriptEvent;
+import com.denizenscript.denizencore.objects.core.ElementTag;
+import com.denizenscript.denizencore.objects.ObjectTag;
+import com.denizenscript.denizencore.scripts.ScriptEntryData;
+import com.denizenscript.denizencore.scripts.containers.ScriptContainer;
+import com.denizenscript.denizencore.tags.TagManager;
+import com.denizenscript.denizencore.utilities.CoreUtilities;
+import com.denizenscript.denizencore.utilities.debugging.Debug;
 import space.morphanone.webizen.fake.FakeScriptEntry;
 import space.morphanone.webizen.server.ResponseWrapper;
 
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,11 +31,11 @@ import java.util.regex.Pattern;
 public abstract class BasicRequestScriptEvent extends ScriptEvent {
 
     public HttpExchange httpExchange;
-    public Element contentType;
-    public Element responseText;
-    public Element responseCode;
+    public ElementTag contentType;
+    public ElementTag responseText;
+    public ElementTag responseCode;
     public File responseFile;
-    public Element parseFile;
+    public ElementTag parseFile;
 
     private String requestType = getRequestType();
     private String lowerRequestType = CoreUtilities.toLowerCase(requestType);
@@ -69,7 +70,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
 
             if (this.responseText != null || this.responseFile != null) {
                 if (this.responseText != null) {
-                    response.write(this.responseText.asString().getBytes("UTF-8"));
+                    response.write(this.responseText.asString().getBytes(StandardCharsets.UTF_8));
                 }
                 else if (this.parseFile.asBoolean()) {
                     FileInputStream input = new FileInputStream(this.responseFile);
@@ -90,26 +91,25 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                         }
                     }
                     m.appendTail(s);
-                    response.write(s.toString().getBytes("UTF-8"));
+                    response.write(s.toString().getBytes(StandardCharsets.UTF_8));
                 }
                 else {
                     response.copyFileFrom(this.responseFile.toPath());
                 }
             }
         } catch (IOException e) {
-            dB.echoError(e);
+            Debug.echoError(e);
         }
         try {
             response.send();
         } catch (IOException e) {
-            dB.echoError(e);
+            Debug.echoError(e);
         }
     }
 
     @Override
-    public boolean couldMatch(ScriptContainer scriptContainer, String s) {
-        String lower = CoreUtilities.toLowerCase(s);
-        return lower.startsWith(lowerRequestType + " ");
+    public boolean couldMatch(ScriptPath path) {
+        return path.eventLower.startsWith(lowerRequestType + " ");
     }
 
     @Override
@@ -124,12 +124,12 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     }
 
     @Override
-    public boolean applyDetermination(ScriptContainer container, String determination) {
-        String lower = CoreUtilities.toLowerCase(determination);
+    public boolean applyDetermination(ScriptPath path, ObjectTag determinationObj) {
+        String lower = CoreUtilities.toLowerCase(determinationObj.toString());
         if (lower.startsWith("code:")) {
-            Element code = new Element(lower.substring(5));
+            ElementTag code = new ElementTag(lower.substring(5));
             if (!code.isInt()) {
-                dB.echoError("Determination for 'code' must be a valid number.");
+                Debug.echoError("Determination for 'code' must be a valid number.");
                 return false;
             }
             responseCode = code;
@@ -137,26 +137,26 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
         else if (lower.startsWith("file:")) {
             File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(5));
             if (!file.exists()) {
-                dB.echoError("File '" + file + "' does not exist.");
+                Debug.echoError("File '" + file + "' does not exist.");
                 return false;
             }
             responseFile = file;
-            parseFile = Element.FALSE;
+            parseFile = ElementTag.FALSE;
         }
         else if (lower.startsWith("parsed_file:")) {
             File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(12));
             if (!file.exists()) {
-                dB.echoError("File '" + file + "' does not exist.");
+                Debug.echoError("File '" + file + "' does not exist.");
                 return false;
             }
             responseFile = file;
-            parseFile = Element.TRUE;
+            parseFile = ElementTag.TRUE;
         }
         else if (lower.startsWith("type:")) {
-            contentType = new Element(lower.substring(5));
+            contentType = new ElementTag(lower.substring(5));
         }
         else {
-            responseText = new Element(determination);
+            responseText = new ElementTag(determinationObj.toString());
         }
         return true;
     }
@@ -167,13 +167,13 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     }
 
     @Override
-    public HashMap<String, dObject> getContext() {
-        HashMap<String, dObject> context = super.getContext();
-        context.put("address", new Element(httpExchange.getRemoteAddress().toString()));
+    public HashMap<String, ObjectTag> getContext() {
+        HashMap<String, ObjectTag> context = super.getContext();
+        context.put("address", new ElementTag(httpExchange.getRemoteAddress().toString()));
         URI uri = httpExchange.getRequestURI();
-        context.put("query", new Element(uri.getQuery()));
-        context.put("request", new Element(uri.getPath()));
-        context.put("user_info", new Element(uri.getUserInfo()));
+        context.put("query", new ElementTag(uri.getQuery()));
+        context.put("request", new ElementTag(uri.getPath()));
+        context.put("user_info", new ElementTag(uri.getUserInfo()));
         return context;
     }
 }

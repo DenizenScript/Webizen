@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 public class RequestWrapper {
 
@@ -55,7 +56,7 @@ public class RequestWrapper {
     public byte[] getFile() throws IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(entireRequest);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        byte[] boundary = reader.readLine().getBytes("UTF-8");
+        byte[] boundary = reader.readLine().getBytes(StandardCharsets.UTF_8);
         String nextLine;
         int max = entireRequest.length - boundary.length - 2;
         while (true) {
@@ -71,7 +72,7 @@ public class RequestWrapper {
                 }
                 this.fileName = nextLine.substring(start + startOffset, end);
             }
-            max -= nextLine.getBytes("UTF-8").length;
+            max -= nextLine.getBytes(StandardCharsets.UTF_8).length;
             if (nextLine.startsWith(" ") || nextLine.startsWith("\t")) {
                 break;
             }

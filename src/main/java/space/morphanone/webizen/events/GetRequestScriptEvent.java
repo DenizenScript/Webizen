@@ -19,11 +19,11 @@ public class GetRequestScriptEvent extends BasicRequestScriptEvent {
     // <context.user_info> Returns info about the authenticated user sending the request, if any.
     //
     // @Determine
-    // Element to set the content of the response directly
-    // "FILE:" + Element to set the file for the response via a file path
-    // "PARSED_FILE:" + Element to set the parsed file for the response via a file path, this will parse any denizen tags inside the file
-    // "CODE:" + Element to set the HTTP status code of the response (e.g. 200)
-    // "TYPE:" + Element to set the MIME (multi purpose mail extension) of the response (e.g. text/html)
+    // ElementTag to set the content of the response directly
+    // "FILE:" + ElementTag to set the file for the response via a file path
+    // "PARSED_FILE:" + ElementTag to set the parsed file for the response via a file path, this will parse any denizen tags inside the file
+    // "CODE:" + ElementTag to set the HTTP status code of the response (e.g. 200)
+    // "TYPE:" + ElementTag to set the MIME (multi purpose mail extension) of the response (e.g. text/html)
     //
     // @Plugin Webizen
     // -->
