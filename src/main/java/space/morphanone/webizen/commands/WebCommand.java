@@ -48,13 +48,13 @@ public class WebCommand extends AbstractCommand {
 
             if (arg.matchesEnum(Action.values())
                     && !scriptEntry.hasObject("action")) {
-                scriptEntry.adObjectTag("action", arg.asElement());
+                scriptEntry.addObject("action", arg.asElement());
             }
 
             else if (arg.matchesPrefix("port")
                     && arg.matchesPrimitive(ArgumentHelper.PrimitiveType.Integer)
                     && !scriptEntry.hasObject("port")) {
-                scriptEntry.adObjectTag("port", arg.asElement());
+                scriptEntry.addObject("port", arg.asElement());
             }
 
             else arg.reportUnhandled();
