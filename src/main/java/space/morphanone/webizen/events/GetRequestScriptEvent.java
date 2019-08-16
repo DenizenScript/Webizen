@@ -8,8 +8,6 @@ public class GetRequestScriptEvent extends BasicRequestScriptEvent {
     //
     // @Regex ^on get request$
     //
-    // @Cancellable false
-    //
     // @Triggers when the web server receives a GET request
     //
     // @Context

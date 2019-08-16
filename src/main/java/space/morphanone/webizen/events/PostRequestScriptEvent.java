@@ -20,8 +20,6 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
     //
     // @Regex ^on post request$
     //
-    // @Cancellable false
-    //
     // @Triggers when the web server receives a POST request
     //
     // @Context
