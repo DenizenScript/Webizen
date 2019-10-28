@@ -1,7 +1,7 @@
 package space.morphanone.webizen.events;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.denizenscript.denizen.BukkitScriptEntryData;
+import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.DenizenAPI;
 import com.denizenscript.denizencore.events.ScriptEvent;
