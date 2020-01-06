@@ -13,7 +13,7 @@ public class GetRequestScriptEvent extends BasicRequestScriptEvent {
     // @Context
     // <context.address> Returns the IP address of the device that sent the request.
     // <context.request> Returns the path that was requested
-    // <context.query> Returns a dList of the query included with the request
+    // <context.query> Returns a ListTag of the query included with the request
     // <context.user_info> Returns info about the authenticated user sending the request, if any.
     //
     // @Determine

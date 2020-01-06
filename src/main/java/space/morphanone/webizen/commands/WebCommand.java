@@ -67,7 +67,7 @@ public class WebCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ScriptEntry scriptEntry) throws CommandExecutionException {
+    public void execute(ScriptEntry scriptEntry) {
 
         ElementTag actionElementTag = scriptEntry.getElement("action");
         ElementTag portElementTag = scriptEntry.getElement("port");
