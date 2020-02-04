@@ -1,6 +1,5 @@
 package space.morphanone.webizen.commands;
 
-import com.denizenscript.denizencore.exceptions.CommandExecutionException;
 import com.denizenscript.denizencore.exceptions.InvalidArgumentsException;
 import com.denizenscript.denizencore.objects.Argument;
 import com.denizenscript.denizencore.objects.core.ElementTag;
@@ -44,7 +43,7 @@ public class WebCommand extends AbstractCommand {
     @Override
     public void parseArgs(ScriptEntry scriptEntry) throws InvalidArgumentsException {
 
-        for (Argument arg : ArgumentHelper.interpret(scriptEntry.getArguments())) {
+        for (Argument arg : scriptEntry.getProcessedArgs()) {
 
             if (arg.matchesEnum(Action.values())
                     && !scriptEntry.hasObject("action")) {

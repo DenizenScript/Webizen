@@ -8,7 +8,6 @@ import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
-import com.denizenscript.denizencore.scripts.containers.ScriptContainer;
 import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
@@ -43,7 +42,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     private static final Pattern tagPattern = Pattern.compile("<\\{([^\\}]*)\\}>");
     private static final CharsetDecoder utfDecoder = Charset.forName("UTF-8").newDecoder();
     private static final FakeScriptEntry reusableScriptEntry = FakeScriptEntry.generate();
-    private static final BukkitTagContext reusableTagContext = new BukkitTagContext(reusableScriptEntry, false);
+    private static final BukkitTagContext reusableTagContext = new BukkitTagContext(reusableScriptEntry);
 
     public abstract String getRequestType();
 
@@ -83,7 +82,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                         // If the parsed output is null, allow Denizen to handle the debugging
                         // and return "null"
                         if (parsed != null) {
-                            String cleaned = TagManager.cleanOutput(parsed);
+                            String cleaned = parsed;
                             m.appendReplacement(s, Matcher.quoteReplacement(cleaned));
                         }
                         else {
@@ -113,9 +112,8 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     }
 
     @Override
-    public boolean matches(ScriptContainer scriptContainer, String s) {
-        String lower = CoreUtilities.toLowerCase(s);
-        return CoreUtilities.xthArgEquals(1, lower, "request");
+    public boolean matches(ScriptPath path) {
+        return path.eventArgLowerAt(1).equals("request");
     }
 
     @Override
@@ -141,7 +139,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                 return false;
             }
             responseFile = file;
-            parseFile = ElementTag.FALSE;
+            parseFile = new ElementTag("false");
         }
         else if (lower.startsWith("parsed_file:")) {
             File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(12));
@@ -150,7 +148,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                 return false;
             }
             responseFile = file;
-            parseFile = ElementTag.TRUE;
+            parseFile = new ElementTag("true");
         }
         else if (lower.startsWith("type:")) {
             contentType = new ElementTag(lower.substring(5));
