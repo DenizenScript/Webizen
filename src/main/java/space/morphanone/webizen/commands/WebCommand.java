@@ -3,7 +3,6 @@ package space.morphanone.webizen.commands;
 import com.denizenscript.denizencore.exceptions.InvalidArgumentsException;
 import com.denizenscript.denizencore.objects.Argument;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import com.denizenscript.denizencore.objects.ArgumentHelper;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
@@ -51,7 +50,7 @@ public class WebCommand extends AbstractCommand {
             }
 
             else if (arg.matchesPrefix("port")
-                    && arg.matchesPrimitive(ArgumentHelper.PrimitiveType.Integer)
+                    && arg.matchesInteger()
                     && !scriptEntry.hasObject("port")) {
                 scriptEntry.addObject("port", arg.asElement());
             }
