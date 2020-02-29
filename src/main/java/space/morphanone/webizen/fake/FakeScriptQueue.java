@@ -1,9 +1,6 @@
 package space.morphanone.webizen.fake;
 
-import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.queues.ScriptQueue;
-
-import java.util.HashMap;
 
 public class FakeScriptQueue extends ScriptQueue {
 
@@ -24,9 +21,5 @@ public class FakeScriptQueue extends ScriptQueue {
     @Override
     protected boolean shouldRevolve() {
         throw new IllegalStateException("This is a fake queue!");
-    }
-
-    public void setContext(HashMap<String, ObjectTag> context) {
-        this.cachedContext = context;
     }
 }
