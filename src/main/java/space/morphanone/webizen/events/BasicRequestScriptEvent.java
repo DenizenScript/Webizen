@@ -17,13 +17,11 @@ import space.morphanone.webizen.server.ResponseWrapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,7 +57,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
         ResponseWrapper response = new ResponseWrapper(httpExchange);
         try {
             // Add context to fake ScriptQueue for parsed file tags
-            reusableScriptEntry.getResidingQueue().setContext(getContext());
+            reusableScriptEntry.getResidingQueue().setContextSource(this);
 
             // Set HTTP response headers before anything else
             response.setContentType(this.contentType != null ? this.contentType.asString() : "text/html");
@@ -165,13 +163,19 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     }
 
     @Override
-    public HashMap<String, ObjectTag> getContext() {
-        HashMap<String, ObjectTag> context = super.getContext();
-        context.put("address", new ElementTag(httpExchange.getRemoteAddress().toString()));
-        URI uri = httpExchange.getRequestURI();
-        context.put("query", new ElementTag(uri.getQuery()));
-        context.put("request", new ElementTag(uri.getPath()));
-        context.put("user_info", new ElementTag(uri.getUserInfo()));
-        return context;
+    public ObjectTag getContext(String name) {
+        if (name.equals("address")) {
+            return new ElementTag(httpExchange.getRemoteAddress().toString());
+        }
+        else if (name.equals("query")) {
+            return new ElementTag(httpExchange.getRequestURI().getQuery());
+        }
+        else if (name.equals("request")) {
+            return new ElementTag(httpExchange.getRequestURI().getPath());
+        }
+        else if (name.equals("user_info")) {
+            return new ElementTag(httpExchange.getRequestURI().getUserInfo());
+        }
+        return super.getContext(name);
     }
 }

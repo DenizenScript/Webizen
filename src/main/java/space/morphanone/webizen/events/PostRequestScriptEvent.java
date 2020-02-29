@@ -10,7 +10,6 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import space.morphanone.webizen.server.RequestWrapper;
 
 import java.io.*;
-import java.util.HashMap;
 
 public class PostRequestScriptEvent extends BasicRequestScriptEvent {
 
@@ -96,10 +95,13 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
     }
 
     @Override
-    public HashMap<String, ObjectTag> getContext() {
-        HashMap<String, ObjectTag> context = super.getContext();
-        context.put("upload_name", fileName);
-        context.put("upload_size_mb", new ElementTag(requestBody.length/(1000*1000)));
-        return context;
+    public ObjectTag getContext(String name) {
+        if (name.equals("upload_name")) {
+            return fileName;
+        }
+        else if (name.equals("upload_size_mb")) {
+            return new ElementTag(requestBody.length/(1000*1000));
+        }
+        return super.getContext(name);
     }
 }
