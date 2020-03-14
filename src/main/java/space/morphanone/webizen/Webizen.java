@@ -1,6 +1,7 @@
 package space.morphanone.webizen;
 
 import com.denizenscript.denizen.Denizen;
+import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.morphanone.webizen.commands.WebCommand;
@@ -24,7 +25,7 @@ public class Webizen extends JavaPlugin {
             return;
         }
 
-        new WebCommand().activate().as("WEB").withOptions("web [start/stop] (port:<#>{80})", 1);
+        DenizenCore.getCommandRegistry().registerCommand(WebCommand.class);
         ScriptEvent.registerScriptEvent(new GetRequestScriptEvent());
         ScriptEvent.registerScriptEvent(new PostRequestScriptEvent());
     }

@@ -13,10 +13,17 @@ import java.net.BindException;
 
 public class WebCommand extends AbstractCommand {
 
+    public WebCommand() {
+        setName("web");
+        setSyntax("web [start/stop] (port:<#>)");
+        setRequiredArguments(1, 2);
+    }
+
     // <--[command]
     // @Name Web
-    // @Syntax Web [start/stop] (port:<#>)
+    // @Syntax web [start/stop] (port:<#>)
     // @Required 1
+    // @Maximum 2
     // @Short Manages the web server ran on your minecraft server
     // @group addons
     //
