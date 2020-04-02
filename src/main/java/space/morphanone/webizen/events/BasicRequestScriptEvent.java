@@ -1,5 +1,6 @@
 package space.morphanone.webizen.events;
 
+import com.denizenscript.denizen.utilities.Utilities;
 import com.sun.net.httpserver.HttpExchange;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizen.tags.BukkitTagContext;
@@ -132,18 +133,26 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
             scriptResponse.responseCode = code;
         }
         else if (lower.startsWith("file:")) {
-            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(5));
+            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), determinationObj.toString().substring(5));
             if (!file.exists()) {
                 Debug.echoError("File '" + file + "' does not exist.");
+                return false;
+            }
+            if (!Utilities.canReadFile(file)) {
+                Debug.echoError("File '" + file + "' is restricted from access by the Denizen config.");
                 return false;
             }
             scriptResponse.responseFile = file;
             scriptResponse.parseFile = new ElementTag("false");
         }
         else if (lower.startsWith("parsed_file:")) {
-            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(12));
+            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), determinationObj.toString().substring(12));
             if (!file.exists()) {
                 Debug.echoError("File '" + file + "' does not exist.");
+                return false;
+            }
+            if (!Utilities.canReadFile(file)) {
+                Debug.echoError("File '" + file + "' is restricted from access by the Denizen config.");
                 return false;
             }
             scriptResponse.responseFile = file;
