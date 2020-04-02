@@ -28,11 +28,16 @@ import java.util.regex.Pattern;
 public abstract class BasicRequestScriptEvent extends ScriptEvent {
 
     public HttpExchange httpExchange;
-    public ElementTag contentType;
-    public ElementTag responseText;
-    public ElementTag responseCode;
-    public File responseFile;
-    public ElementTag parseFile;
+
+    public class ResponseOptions {
+        public ElementTag contentType;
+        public ElementTag responseText;
+        public ElementTag responseCode;
+        public File responseFile;
+        public ElementTag parseFile;
+    }
+
+    public ResponseOptions scriptResponse;
 
     private String requestType = getRequestType();
     private String lowerRequestType = CoreUtilities.toLowerCase(requestType);
@@ -46,11 +51,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
 
     public void fire(HttpExchange httpExchange) {
         this.httpExchange = httpExchange;
-        this.contentType = null;
-        this.responseText = null;
-        this.responseCode = null;
-        this.responseFile = null;
-        this.parseFile = null;
+        scriptResponse = new ResponseOptions();
 
         fire();
 
@@ -60,17 +61,17 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
             reusableScriptEntry.getResidingQueue().setContextSource(this);
 
             // Set HTTP response headers before anything else
-            response.setContentType(this.contentType != null ? this.contentType.asString() : "text/html");
-            if (this.responseCode != null) {
-                response.setStatus(this.responseCode.asInt());
+            response.setContentType(scriptResponse.contentType != null ? scriptResponse.contentType.asString() : "text/html");
+            if (scriptResponse.responseCode != null) {
+                response.setStatus(scriptResponse.responseCode.asInt());
             }
 
-            if (this.responseText != null || this.responseFile != null) {
-                if (this.responseText != null) {
-                    response.write(this.responseText.asString().getBytes(StandardCharsets.UTF_8));
+            if (scriptResponse.responseText != null || scriptResponse.responseFile != null) {
+                if (scriptResponse.responseText != null) {
+                    response.write(scriptResponse.responseText.asString().getBytes(StandardCharsets.UTF_8));
                 }
-                else if (this.parseFile.asBoolean()) {
-                    FileInputStream input = new FileInputStream(this.responseFile);
+                else if (scriptResponse.parseFile.asBoolean()) {
+                    FileInputStream input = new FileInputStream(scriptResponse.responseFile);
                     FileChannel channel = input.getChannel();
                     ByteBuffer bbuf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
                     StringBuffer s = new StringBuffer();
@@ -91,7 +92,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                     response.write(s.toString().getBytes(StandardCharsets.UTF_8));
                 }
                 else {
-                    response.copyFileFrom(this.responseFile.toPath());
+                    response.copyFileFrom(scriptResponse.responseFile.toPath());
                 }
             }
         } catch (IOException e) {
@@ -128,7 +129,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                 Debug.echoError("Determination for 'code' must be a valid number.");
                 return false;
             }
-            responseCode = code;
+            scriptResponse.responseCode = code;
         }
         else if (lower.startsWith("file:")) {
             File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(5));
@@ -136,8 +137,8 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                 Debug.echoError("File '" + file + "' does not exist.");
                 return false;
             }
-            responseFile = file;
-            parseFile = new ElementTag("false");
+            scriptResponse.responseFile = file;
+            scriptResponse.parseFile = new ElementTag("false");
         }
         else if (lower.startsWith("parsed_file:")) {
             File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), lower.substring(12));
@@ -145,14 +146,14 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                 Debug.echoError("File '" + file + "' does not exist.");
                 return false;
             }
-            responseFile = file;
-            parseFile = new ElementTag("true");
+            scriptResponse.responseFile = file;
+            scriptResponse.parseFile = new ElementTag("true");
         }
         else if (lower.startsWith("type:")) {
-            contentType = new ElementTag(lower.substring(5));
+            scriptResponse.contentType = new ElementTag(lower.substring(5));
         }
         else {
-            responseText = new ElementTag(determinationObj.toString());
+            scriptResponse.responseText = new ElementTag(determinationObj.toString());
         }
         return true;
     }
