@@ -183,11 +183,10 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
             MapTag mappedValues = new MapTag();
             String query = httpExchange.getRequestURI().getQuery();
             try {
-                query = java.net.URLDecoder.decode(query, StandardCharsets.UTF_8.name());
                 if (query != null) {
                     for (String value : CoreUtilities.split(query, '&')) {
                         List<String> split = CoreUtilities.split(value, '=');
-                        mappedValues.map.put(new StringHolder(split.get(0)), new ElementTag(split.get(1)));
+                        mappedValues.map.put(new StringHolder(split.get(0)), new ElementTag(java.net.URLDecoder.decode(split.get(1), StandardCharsets.UTF_8.name())));
                     }
                 }
             }
