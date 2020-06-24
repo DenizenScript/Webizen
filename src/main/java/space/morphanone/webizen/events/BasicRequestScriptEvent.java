@@ -83,13 +83,8 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                     while (m.find()) {
                         String parsed = TagManager.readSingleTag(m.group(1), reusableTagContext);
                         // If the parsed output is null, allow Denizen to handle the debugging
-                        // and return "null"
-                        if (parsed != null) {
-                            m.appendReplacement(s, Matcher.quoteReplacement(parsed));
-                        }
-                        else {
-                            m.appendReplacement(s, "null");
-                        }
+                        // and return "null"\
+                        m.appendReplacement(s, parsed != null ? Matcher.quoteReplacement(parsed) : "null");
                     }
                     m.appendTail(s);
                     response.write(s.toString().getBytes(StandardCharsets.UTF_8));
