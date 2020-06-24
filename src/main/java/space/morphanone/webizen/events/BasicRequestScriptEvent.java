@@ -20,6 +20,7 @@ import space.morphanone.webizen.server.ResponseWrapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -83,7 +84,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                     while (m.find()) {
                         String parsed = TagManager.readSingleTag(m.group(1), reusableTagContext);
                         // If the parsed output is null, allow Denizen to handle the debugging
-                        // and return "null"\
+                        // and return "null"
                         m.appendReplacement(s, parsed != null ? Matcher.quoteReplacement(parsed) : "null");
                     }
                     m.appendTail(s);
@@ -181,11 +182,17 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
         else if (name.equals("query_map")) {
             MapTag mappedValues = new MapTag();
             String query = httpExchange.getRequestURI().getQuery();
-            if (query != null) {
-                for (String value : CoreUtilities.split(query, '&')) {
-                    List<String> split = CoreUtilities.split(value, '=');
-                    mappedValues.map.put(new StringHolder(split.get(0)), new ElementTag(split.get(1)));
+            try {
+                query = java.net.URLDecoder.decode(query, StandardCharsets.UTF_8.name());
+                if (query != null) {
+                    for (String value : CoreUtilities.split(query, '&')) {
+                        List<String> split = CoreUtilities.split(value, '=');
+                        mappedValues.map.put(new StringHolder(split.get(0)), new ElementTag(split.get(1)));
+                    }
                 }
+            }
+            catch (UnsupportedEncodingException e) {
+                Debug.echoError(e);
             }
             return mappedValues;
         }

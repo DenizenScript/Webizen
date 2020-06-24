@@ -25,7 +25,7 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
     // <context.address> Returns the IP address of the device that sent the request.
     // <context.request> Returns the path that was requested.
     // <context.query> Returns a ElementTag of the raw query included with the request.
-    // <context.query_map> Returns a map of the query. `Potato=Carrot&Corn=Bacon` will return `map@Carrot/el@Carrot|Corn/el@Bacon`.
+    // <context.query_map> Returns a map of the query.
     // <context.user_info> Returns info about the authenticated user sending the request, if any.
     // <context.upload_name> returns the name of the file posted.
     // <context.upload_size_mb> returns the size of the upload in MegaBytes (where 1 MegaByte = 1 000 000 Bytes).
