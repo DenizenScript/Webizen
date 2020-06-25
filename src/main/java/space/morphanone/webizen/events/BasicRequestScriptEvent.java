@@ -184,7 +184,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
             String query = httpExchange.getRequestURI().getQuery();
             if (query != null) {
                 for (String value : CoreUtilities.split(query, '&')) {
-                    List<String> split = CoreUtilities.split(value, '=');
+                    List<String> split = CoreUtilities.split(value, '=', 2);
                     try {
                         String split_key = java.net.URLDecoder.decode(split.get(0), "UTF-8");
                         String split_value = java.net.URLDecoder.decode(split.get(1), "UTF-8");
