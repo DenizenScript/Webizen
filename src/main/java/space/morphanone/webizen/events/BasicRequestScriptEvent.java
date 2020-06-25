@@ -182,16 +182,18 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
         else if (name.equals("query_map")) {
             MapTag mappedValues = new MapTag();
             String query = httpExchange.getRequestURI().getQuery();
-            try {
-                if (query != null) {
-                    for (String value : CoreUtilities.split(query, '&')) {
-                        List<String> split = CoreUtilities.split(value, '=');
-                        mappedValues.map.put(new StringHolder(split.get(0)), new ElementTag(java.net.URLDecoder.decode(split.get(1), StandardCharsets.UTF_8.name())));
+            if (query != null) {
+                for (String value : CoreUtilities.split(query, '&')) {
+                    List<String> split = CoreUtilities.split(value, '=');
+                    try {
+                        String split_key = java.net.URLDecoder.decode(split.get(0), "UTF-8");
+                        String split_value = java.net.URLDecoder.decode(split.get(1), "UTF-8");
+                        mappedValues.map.put(new StringHolder(split_key), new ElementTag(split_value));
+                    }
+                    catch (UnsupportedEncodingException e) {
+                        Debug.echoError(e);
                     }
                 }
-            }
-            catch (UnsupportedEncodingException e) {
-                Debug.echoError(e);
             }
             return mappedValues;
         }
