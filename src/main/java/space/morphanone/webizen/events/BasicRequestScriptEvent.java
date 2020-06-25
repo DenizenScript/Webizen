@@ -1,6 +1,8 @@
 package space.morphanone.webizen.events;
 
 import com.denizenscript.denizen.utilities.Utilities;
+import com.denizenscript.denizencore.objects.core.MapTag;
+import com.denizenscript.denizencore.utilities.text.StringHolder;
 import com.sun.net.httpserver.HttpExchange;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizen.tags.BukkitTagContext;
@@ -18,11 +20,13 @@ import space.morphanone.webizen.server.ResponseWrapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +48,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
     private String lowerRequestType = CoreUtilities.toLowerCase(requestType);
 
     private static final Pattern tagPattern = Pattern.compile("<\\{([^\\}]*)\\}>");
-    private static final CharsetDecoder utfDecoder = Charset.forName("UTF-8").newDecoder();
+    private static final CharsetDecoder utfDecoder = StandardCharsets.UTF_8.newDecoder();
     private static final FakeScriptEntry reusableScriptEntry = FakeScriptEntry.generate();
     private static final BukkitTagContext reusableTagContext = new BukkitTagContext(reusableScriptEntry);
 
@@ -81,13 +85,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                         String parsed = TagManager.readSingleTag(m.group(1), reusableTagContext);
                         // If the parsed output is null, allow Denizen to handle the debugging
                         // and return "null"
-                        if (parsed != null) {
-                            String cleaned = parsed;
-                            m.appendReplacement(s, Matcher.quoteReplacement(cleaned));
-                        }
-                        else {
-                            m.appendReplacement(s, "null");
-                        }
+                        m.appendReplacement(s, parsed != null ? Matcher.quoteReplacement(parsed) : "null");
                     }
                     m.appendTail(s);
                     response.write(s.toString().getBytes(StandardCharsets.UTF_8));
@@ -178,7 +176,26 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
             return new ElementTag(httpExchange.getRemoteAddress().toString());
         }
         else if (name.equals("query")) {
-            return new ElementTag(httpExchange.getRequestURI().getQuery());
+            String query = httpExchange.getRequestURI().getQuery();
+            return new ElementTag(query != null ? query : "");
+        }
+        else if (name.equals("query_map")) {
+            MapTag mappedValues = new MapTag();
+            String query = httpExchange.getRequestURI().getQuery();
+            if (query != null) {
+                for (String value : CoreUtilities.split(query, '&')) {
+                    List<String> split = CoreUtilities.split(value, '=', 2);
+                    try {
+                        String split_key = java.net.URLDecoder.decode(split.get(0), "UTF-8");
+                        String split_value = java.net.URLDecoder.decode(split.get(1), "UTF-8");
+                        mappedValues.map.put(new StringHolder(split_key), new ElementTag(split_value));
+                    }
+                    catch (UnsupportedEncodingException e) {
+                        Debug.echoError(e);
+                    }
+                }
+            }
+            return mappedValues;
         }
         else if (name.equals("request")) {
             return new ElementTag(httpExchange.getRequestURI().getPath());
