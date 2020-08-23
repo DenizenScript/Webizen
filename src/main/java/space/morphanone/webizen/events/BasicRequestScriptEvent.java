@@ -2,7 +2,6 @@ package space.morphanone.webizen.events;
 
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.MapTag;
-import com.denizenscript.denizencore.utilities.text.StringHolder;
 import com.sun.net.httpserver.HttpExchange;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizen.tags.BukkitTagContext;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -188,7 +186,7 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
                     try {
                         String split_key = java.net.URLDecoder.decode(split.get(0), "UTF-8");
                         String split_value = java.net.URLDecoder.decode(split.get(1), "UTF-8");
-                        mappedValues.map.put(new StringHolder(split_key), new ElementTag(split_value));
+                        mappedValues.putObject(split_key, new ElementTag(split_value));
                     }
                     catch (UnsupportedEncodingException e) {
                         Debug.echoError(e);
