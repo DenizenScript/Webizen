@@ -1,12 +1,12 @@
 package space.morphanone.webizen.events;
 
+import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.sun.net.httpserver.HttpExchange;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.DenizenAPI;
-import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class BasicRequestScriptEvent extends ScriptEvent {
+public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
 
     public HttpExchange httpExchange;
 
@@ -104,12 +104,10 @@ public abstract class BasicRequestScriptEvent extends ScriptEvent {
 
     @Override
     public boolean couldMatch(ScriptPath path) {
-        return path.eventLower.startsWith(lowerRequestType + " ");
-    }
-
-    @Override
-    public boolean matches(ScriptPath path) {
-        return path.eventArgLowerAt(1).equals("request");
+        if (!path.eventLower.startsWith(lowerRequestType + " request")) {
+            return false;
+        }
+        return true;
     }
 
     @Override
