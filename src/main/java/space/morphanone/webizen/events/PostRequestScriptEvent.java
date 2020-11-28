@@ -40,6 +40,7 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
     //
     // @Plugin Webizen
     // -->
+
     public PostRequestScriptEvent() {
         instance = this;
     }

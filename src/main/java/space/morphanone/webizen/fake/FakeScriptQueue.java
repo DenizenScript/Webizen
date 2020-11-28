@@ -9,7 +9,7 @@ public class FakeScriptQueue extends ScriptQueue {
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         throw new IllegalStateException("This is a fake queue!");
     }
 
@@ -19,7 +19,7 @@ public class FakeScriptQueue extends ScriptQueue {
     }
 
     @Override
-    protected boolean shouldRevolve() {
+    public boolean shouldRevolve() {
         throw new IllegalStateException("This is a fake queue!");
     }
 }
