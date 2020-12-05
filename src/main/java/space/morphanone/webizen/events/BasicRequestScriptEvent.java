@@ -1,12 +1,12 @@
 package space.morphanone.webizen.events;
 
+import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.sun.net.httpserver.HttpExchange;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
 import com.denizenscript.denizen.tags.BukkitTagContext;
-import com.denizenscript.denizen.utilities.DenizenAPI;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.scripts.ScriptEntryData;
@@ -127,7 +127,7 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
             scriptResponse.responseCode = code;
         }
         else if (lower.startsWith("file:")) {
-            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), determinationObj.toString().substring(5));
+            File file = new File(Denizen.getInstance().getDataFolder(), determinationObj.toString().substring(5));
             if (!file.exists()) {
                 Debug.echoError("File '" + file + "' does not exist.");
                 return false;
@@ -140,7 +140,7 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
             scriptResponse.parseFile = new ElementTag("false");
         }
         else if (lower.startsWith("parsed_file:")) {
-            File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), determinationObj.toString().substring(12));
+            File file = new File(Denizen.getInstance().getDataFolder(), determinationObj.toString().substring(12));
             if (!file.exists()) {
                 Debug.echoError("File '" + file + "' does not exist.");
                 return false;

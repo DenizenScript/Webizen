@@ -1,7 +1,7 @@
 package space.morphanone.webizen.events;
 
+import com.denizenscript.denizen.Denizen;
 import com.sun.net.httpserver.HttpExchange;
-import com.denizenscript.denizen.utilities.DenizenAPI;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
@@ -70,7 +70,7 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
 
         if (this.saveUpload != null) {
             try {
-                File file = new File(DenizenAPI.getCurrentInstance().getDataFolder(), saveUpload.asString());
+                File file = new File(Denizen.getInstance().getDataFolder(), saveUpload.asString());
                 if (!Utilities.canWriteToFile(file)) {
                     Debug.echoError("Save failed: cannot save there!");
                     return;
