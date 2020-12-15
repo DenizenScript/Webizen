@@ -7,7 +7,7 @@
     <groupId>space.morphanone</groupId>
     <artifactId>webizen</artifactId>
     <packaging>jar</packaging>
-    <version>0.2.5-SNAPSHOT</version>
+    <version>0.2.6-SNAPSHOT</version>
     <name>Webizen</name>
     <description>Web page add-on for Denizen</description>
 

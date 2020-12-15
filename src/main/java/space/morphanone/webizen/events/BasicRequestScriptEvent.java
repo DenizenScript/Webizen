@@ -13,6 +13,7 @@ import com.denizenscript.denizencore.scripts.ScriptEntryData;
 import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import org.bukkit.scheduler.BukkitRunnable;
 import space.morphanone.webizen.fake.FakeScriptEntry;
 import space.morphanone.webizen.server.ResponseWrapper;
 
@@ -25,6 +26,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +58,22 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
         this.httpExchange = httpExchange;
         scriptResponse = new ResponseOptions();
 
-        fire();
+        CompletableFuture future = new CompletableFuture();
+        BukkitScriptEvent altEvent = (BukkitScriptEvent) clone();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                altEvent.fire();
+                future.complete(null);
+            }
+        }.runTask(Denizen.getInstance());
+
+        try {
+            future.wait();
+        }
+        catch (InterruptedException ex) {
+            Debug.echoError(ex);
+        }
 
         ResponseWrapper response = new ResponseWrapper(httpExchange);
         try {

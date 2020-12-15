@@ -1,5 +1,5 @@
 name: Webizen
 author: Morphan1
-version: 0.2.5
+version: 0.2.6
 main: space.morphanone.webizen.Webizen
 depend: [Denizen]
