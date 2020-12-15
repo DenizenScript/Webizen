@@ -27,6 +27,7 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,9 +70,12 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
         }.runTask(Denizen.getInstance());
 
         try {
-            future.wait();
+            future.get();
         }
         catch (InterruptedException ex) {
+            Debug.echoError(ex);
+        }
+        catch (ExecutionException ex) {
             Debug.echoError(ex);
         }
 
