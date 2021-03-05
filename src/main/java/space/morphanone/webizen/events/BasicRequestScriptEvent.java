@@ -189,36 +189,35 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
 
     @Override
     public ObjectTag getContext(String name) {
-        if (name.equals("address")) {
-            return new ElementTag(httpExchange.getRemoteAddress().toString());
-        }
-        else if (name.equals("query")) {
-            String query = httpExchange.getRequestURI().getQuery();
-            return new ElementTag(query != null ? query : "");
-        }
-        else if (name.equals("query_map")) {
-            MapTag mappedValues = new MapTag();
-            String query = httpExchange.getRequestURI().getQuery();
-            if (query != null) {
-                for (String value : CoreUtilities.split(query, '&')) {
-                    List<String> split = CoreUtilities.split(value, '=', 2);
-                    try {
-                        String split_key = java.net.URLDecoder.decode(split.get(0), "UTF-8");
-                        String split_value = java.net.URLDecoder.decode(split.get(1), "UTF-8");
-                        mappedValues.putObject(split_key, new ElementTag(split_value));
-                    }
-                    catch (UnsupportedEncodingException e) {
-                        Debug.echoError(e);
+        switch (name) {
+            case "address":
+                return new ElementTag(httpExchange.getRemoteAddress().toString());
+            case "query": {
+                String query = httpExchange.getRequestURI().getQuery();
+                return new ElementTag(query != null ? query : "");
+            }
+            case "query_map": {
+                MapTag mappedValues = new MapTag();
+                String query = httpExchange.getRequestURI().getQuery();
+                if (query != null) {
+                    for (String value : CoreUtilities.split(query, '&')) {
+                        List<String> split = CoreUtilities.split(value, '=', 2);
+                        try {
+                            String split_key = java.net.URLDecoder.decode(split.get(0), "UTF-8");
+                            String split_value = java.net.URLDecoder.decode(split.get(1), "UTF-8");
+                            mappedValues.putObject(split_key, new ElementTag(split_value));
+                        }
+                        catch (UnsupportedEncodingException e) {
+                            Debug.echoError(e);
+                        }
                     }
                 }
+                return mappedValues;
             }
-            return mappedValues;
-        }
-        else if (name.equals("request")) {
-            return new ElementTag(httpExchange.getRequestURI().getPath());
-        }
-        else if (name.equals("user_info")) {
-            return new ElementTag(httpExchange.getRequestURI().getUserInfo());
+            case "request":
+                return new ElementTag(httpExchange.getRequestURI().getPath());
+            case "user_info":
+                return new ElementTag(httpExchange.getRequestURI().getUserInfo());
         }
         return super.getContext(name);
     }
