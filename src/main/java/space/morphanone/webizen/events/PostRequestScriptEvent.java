@@ -21,6 +21,8 @@ public class PostRequestScriptEvent extends BasicRequestScriptEvent {
     //
     // @Triggers when the web server receives a POST request
     //
+    // @Group Webizen
+    //
     // @Context
     // <context.address> Returns the IP address of the device that sent the request.
     // <context.request> Returns the path that was requested.
