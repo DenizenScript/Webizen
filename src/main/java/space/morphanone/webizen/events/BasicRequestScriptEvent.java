@@ -72,10 +72,7 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
         try {
             future.get();
         }
-        catch (InterruptedException ex) {
-            Debug.echoError(ex);
-        }
-        catch (ExecutionException ex) {
+        catch (InterruptedException | ExecutionException ex) {
             Debug.echoError(ex);
         }
 
