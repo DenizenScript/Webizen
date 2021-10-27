@@ -98,10 +98,10 @@ public abstract class BasicRequestScriptEvent extends BukkitScriptEvent {
                     StringBuffer s = new StringBuffer();
                     Matcher m = tagPattern.matcher(utfDecoder.decode(bbuf));
                     while (m.find()) {
-                        String parsed = TagManager.readSingleTag(m.group(1), reusableTagContext);
+                        ObjectTag parsed = TagManager.parseTextToTag(m.group(1), reusableTagContext).parse(reusableTagContext);
                         // If the parsed output is null, allow Denizen to handle the debugging
                         // and return "null"
-                        m.appendReplacement(s, parsed != null ? Matcher.quoteReplacement(parsed) : "null");
+                        m.appendReplacement(s, parsed != null ? Matcher.quoteReplacement(parsed.toString()) : "null");
                     }
                     m.appendTail(s);
                     response.write(s.toString().getBytes(StandardCharsets.UTF_8));
