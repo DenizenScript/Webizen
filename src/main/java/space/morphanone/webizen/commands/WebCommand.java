@@ -77,7 +77,7 @@ public class WebCommand extends AbstractCommand {
         ElementTag actionElementTag = scriptEntry.getElement("action");
         ElementTag portElementTag = scriptEntry.getElement("port");
 
-        Debug.report(scriptEntry, getName(), actionElementTag.debug() + portElementTag.debug());
+        Debug.report(scriptEntry, getName(), actionElementTag, portElementTag);
 
         switch (Action.valueOf(actionElementTag.asString().toUpperCase())) {
             case START:

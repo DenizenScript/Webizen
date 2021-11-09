@@ -17,9 +17,4 @@ public class FakeScriptQueue extends ScriptQueue {
     protected void onStop() {
         throw new IllegalStateException("This is a fake queue!");
     }
-
-    @Override
-    public boolean shouldRevolve() {
-        throw new IllegalStateException("This is a fake queue!");
-    }
 }
