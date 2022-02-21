@@ -51,7 +51,7 @@ public class WebCommand extends AbstractCommand {
 
         for (Argument arg : scriptEntry) {
 
-            if (arg.matchesEnum(Action.values())
+            if (arg.matchesEnum(Action.class)
                     && !scriptEntry.hasObject("action")) {
                 scriptEntry.addObject("action", arg.asElement());
             }

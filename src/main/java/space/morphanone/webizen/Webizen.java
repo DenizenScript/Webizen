@@ -26,8 +26,8 @@ public class Webizen extends JavaPlugin {
         }
 
         DenizenCore.commandRegistry.registerCommand(WebCommand.class);
-        ScriptEvent.registerScriptEvent(new GetRequestScriptEvent());
-        ScriptEvent.registerScriptEvent(new PostRequestScriptEvent());
+        ScriptEvent.registerScriptEvent(GetRequestScriptEvent.class);
+        ScriptEvent.registerScriptEvent(PostRequestScriptEvent.class);
     }
 
     @Override
