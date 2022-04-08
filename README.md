@@ -6,7 +6,9 @@ Builds: https://ci.citizensnpcs.co/job/Webizen/
 
 ## Status
 
-Not actively maintained beyond bare minimum, but should function fine.
+Deprecated in favor of the Denizen core `webserver` command. Refer to https://meta.denizenscript.com/Docs/Commands/webserver for details.
+
+Ask in the Denizen Discord @ https://discord.gg/Q6pZGSR if you need help.
 
 ## Simple tutorial by BlackCoyote
 This is a good example of usage, however tag documentation is out of date.

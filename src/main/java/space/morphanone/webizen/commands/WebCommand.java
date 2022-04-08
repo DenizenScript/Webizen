@@ -27,6 +27,8 @@ public class WebCommand extends AbstractCommand {
     // @Short Manages the web server ran on your minecraft server.
     // @group addons
     //
+    // @Deprecated Replaced by core 'webserver' command
+    //
     // @Description
     // Lets you start or stop a web server.
     // Only one web server can be run at a time.

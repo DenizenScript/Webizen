@@ -12,6 +12,8 @@ public class GetRequestScriptEvent extends BasicRequestScriptEvent {
     //
     // @Group Webizen
     //
+    // @Deprecated Replaced by core 'webserver' command and events
+    //
     // @Context
     // <context.address> Returns the IP address of the device that sent the request.
     // <context.request> Returns the path that was requested.
